@@ -1,0 +1,41 @@
+[
+  {
+    "arguments": [
+      "/usr/sbin/gcc",
+      "-c",
+      "-Iinclude",
+      "-o",
+      "obj/file.o",
+      "src/file.c"
+    ],
+    "directory": "/home/abu/projects/c-learning/final-project-z2h-shell",
+    "file": "/home/abu/projects/c-learning/final-project-z2h-shell/src/file.c",
+    "output": "/home/abu/projects/c-learning/final-project-z2h-shell/obj/file.o"
+  },
+  {
+    "arguments": [
+      "/usr/sbin/gcc",
+      "-c",
+      "-Iinclude",
+      "-o",
+      "obj/main.o",
+      "src/main.c"
+    ],
+    "directory": "/home/abu/projects/c-learning/final-project-z2h-shell",
+    "file": "/home/abu/projects/c-learning/final-project-z2h-shell/src/main.c",
+    "output": "/home/abu/projects/c-learning/final-project-z2h-shell/obj/main.o"
+  },
+  {
+    "arguments": [
+      "/usr/sbin/gcc",
+      "-c",
+      "-Iinclude",
+      "-o",
+      "obj/parse.o",
+      "src/parse.c"
+    ],
+    "directory": "/home/abu/projects/c-learning/final-project-z2h-shell",
+    "file": "/home/abu/projects/c-learning/final-project-z2h-shell/src/parse.c",
+    "output": "/home/abu/projects/c-learning/final-project-z2h-shell/obj/parse.o"
+  }
+]
