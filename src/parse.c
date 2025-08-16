@@ -88,6 +88,11 @@ int validate_db_header(int fd, struct dbheader_t **headerOut) {
 int create_db_header(int fd, struct dbheader_t **headerOut) {
   struct dbheader_t *header = calloc(1, sizeof(struct dbheader_t));
 
+  if (fd < 0) {
+    perror("Invalid file descriptor");
+    return STATUS_ERROR;
+  }
+
   if (header == NULL) {
     printf("Error allocating memory for db header\n");
     return STATUS_ERROR;
