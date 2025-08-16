@@ -18,8 +18,7 @@
 // int read_employees(int fd, struct dbheader_t *dbhdr,
 //                    struct employee_t **employeesOut) {}
 
-int output_file(int fd, struct dbheader_t *dbhdr,
-                struct employee_t *employees) {
+int output_file(int fd, struct dbheader_t *dbhdr) {
 
   if (fd < 0) {
     perror("Invalid file descriptor");
