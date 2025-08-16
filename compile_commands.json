@@ -8,9 +8,9 @@
       "obj/file.o",
       "src/file.c"
     ],
-    "directory": "/home/abu/projects/c-learning/final-project-z2h-shell",
-    "file": "/home/abu/projects/c-learning/final-project-z2h-shell/src/file.c",
-    "output": "/home/abu/projects/c-learning/final-project-z2h-shell/obj/file.o"
+    "directory": "/home/abu/projects/c-learning",
+    "file": "/home/abu/projects/c-learning/src/file.c",
+    "output": "/home/abu/projects/c-learning/obj/file.o"
   },
   {
     "arguments": [
@@ -21,9 +21,9 @@
       "obj/main.o",
       "src/main.c"
     ],
-    "directory": "/home/abu/projects/c-learning/final-project-z2h-shell",
-    "file": "/home/abu/projects/c-learning/final-project-z2h-shell/src/main.c",
-    "output": "/home/abu/projects/c-learning/final-project-z2h-shell/obj/main.o"
+    "directory": "/home/abu/projects/c-learning",
+    "file": "/home/abu/projects/c-learning/src/main.c",
+    "output": "/home/abu/projects/c-learning/obj/main.o"
   },
   {
     "arguments": [
@@ -34,8 +34,8 @@
       "obj/parse.o",
       "src/parse.c"
     ],
-    "directory": "/home/abu/projects/c-learning/final-project-z2h-shell",
-    "file": "/home/abu/projects/c-learning/final-project-z2h-shell/src/parse.c",
-    "output": "/home/abu/projects/c-learning/final-project-z2h-shell/obj/parse.o"
+    "directory": "/home/abu/projects/c-learning",
+    "file": "/home/abu/projects/c-learning/src/parse.c",
+    "output": "/home/abu/projects/c-learning/obj/parse.o"
   }
 ]
