@@ -13,7 +13,7 @@ int create_db_file(char *filename) {
   if (fd != -1) {
     // File already exists, close the file descriptor and return an error
     close(fd);
-    printf("File %s already exists.\n", filename);
+    printf("File already exists.\n");
     return STATUS_ERROR;
   }
 
@@ -23,10 +23,6 @@ int create_db_file(char *filename) {
     return STATUS_ERROR;
   }
 
-  // Optionally, you can write initial data to the file here
-  // For example, writing a header or metadata
-
-  close(fd);
   return fd; // Return success
 }
 
