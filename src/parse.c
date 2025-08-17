@@ -15,10 +15,10 @@
 int add_employee(struct dbheader_t *dbhdr, struct employee_t *employees,
                  char *addstring) {
 
-  if (dbhdr == NULL || employees == NULL || addstring == NULL) {
-    printf("Invalid input to add_employee\n");
-    return STATUS_ERROR;
-  }
+  // if (dbhdr == NULL || employees == NULL || addstring == NULL) {
+  //   printf("Invalid input to add_employee\n");
+  //   return STATUS_ERROR;
+  // }
 
   char *name = strtok(addstring, ",");
   char *address = strtok(NULL, ",");
