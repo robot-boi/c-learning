@@ -1,7 +1,6 @@
 #include <getopt.h>
 #include <stdbool.h>
 #include <stdio.h>
-#include <stdlib.h>
 #include <unistd.h>
 
 #include "common.h"
@@ -9,96 +8,96 @@
 #include "parse.h"
 
 void print_usage(char *argv[]) {
-  printf("Usage: %s [-n] -f <filepath>\n", argv[0]);
-  printf("Options:\n");
-  printf("  -n            Create a new file\n");
-  printf("  -f <filepath> Specify the file path (required)\n");
-  printf("  -a <string>   Add a new employee (format: name,address,hours)\n");
-  printf("  -l            List all employees\n");
-  return;
+    printf("Usage: %s [-n] -f <filepath>\n", argv[0]);
+    printf("Options:\n");
+    printf("  -n            Create a new file\n");
+    printf("  -f <filepath> Specify the file path (required)\n");
+    printf("  -a <string>   Add a new employee (format: name,address,hours)\n");
+    printf("  -l            List all employees\n");
+    return;
 }
 
 int main(int argc, char *argv[]) {
-  char *filepath = NULL;
-  char *addstring = NULL;
-  bool newfile = false;
-  bool list = false;
-  int c;
-  int dbfd = -1;
-  struct dbheader_t *dbhdr = NULL;
-  struct employee_t *employees = NULL;
+    char              *filepath  = NULL;
+    char              *addstring = NULL;
+    bool               newfile   = false;
+    bool               list      = false;
+    int                c;
+    int                dbfd      = -1;
+    struct dbheader_t *dbhdr     = NULL;
+    struct employee_t *employees = NULL;
 
-  while ((c = getopt(argc, argv, "nf:a:l")) != -1) {
-    switch (c) {
-    case 'n':
-      // Handle the -n option
-      newfile = true;
-      break;
-    case 'f':
-      // Handle the -f option with optarg
-      filepath = optarg;
-      break;
+    while ((c = getopt(argc, argv, "nf:a:l")) != -1) {
+        switch (c) {
+            case 'n':
+                // Handle the -n option
+                newfile = true;
+                break;
+            case 'f':
+                // Handle the -f option with optarg
+                filepath = optarg;
+                break;
 
-    case 'a':
-      // Handle the -f option with optarg
-      addstring = optarg;
-      break;
-    case 'l':
-      // Handle the -f option with optarg
-      list = true;
-      break;
-    case '?':
-      // Handle unknown options
-      printf("Unknown option: %c\n", c);
-      break;
-    default:
-      return -1;
+            case 'a':
+                // Handle the -f option with optarg
+                addstring = optarg;
+                break;
+            case 'l':
+                // Handle the -f option with optarg
+                list = true;
+                break;
+            case '?':
+                // Handle unknown options
+                printf("Unknown option: %c\n", c);
+                break;
+            default:
+                return -1;
+        }
     }
-  }
 
-  if (filepath == NULL) {
-    printf("Filepath is required.\n");
-    print_usage(argv);
+    if (filepath == NULL) {
+        printf("Filepath is required.\n");
+        print_usage(argv);
+        return 0;
+    }
+
+    if (newfile) {
+        dbfd = create_db_file(filepath);
+        if (dbfd == STATUS_ERROR) {
+            printf("Error creating new db file\n");
+            return -1;
+        }
+
+        if (create_db_header(&dbhdr) == STATUS_ERROR) {
+            printf("Error creating db header\n");
+            return -1;
+        }
+    } else {
+        dbfd = open_db_file(filepath);
+        if (dbfd == STATUS_ERROR) {
+            printf("Error opening db file\n");
+            return -1;
+        }
+
+        if (validate_db_header(dbfd, &dbhdr) == STATUS_ERROR) {
+            printf("Error validating db header\n");
+            return -1;
+        }
+    }
+
+    if (read_employees(dbfd, dbhdr, &employees) != STATUS_SUCCESS) {
+        printf("Error reading employees\n");
+        return 0;
+    }
+
+    if (addstring) {
+        add_employee(dbhdr, &employees, addstring);
+    }
+
+    if (list) {
+        list_employees(dbhdr, employees);
+    }
+
+    output_file(dbfd, dbhdr, employees);
     return 0;
-  }
-
-  if (newfile) {
-    dbfd = create_db_file(filepath);
-    if (dbfd == STATUS_ERROR) {
-      printf("Error creating new db file\n");
-      return -1;
-    }
-
-    if (create_db_header(&dbhdr) == STATUS_ERROR) {
-      printf("Error creating db header\n");
-      return -1;
-    }
-  } else {
-    dbfd = open_db_file(filepath);
-    if (dbfd == STATUS_ERROR) {
-      printf("Error opening db file\n");
-      return -1;
-    }
-
-    if (validate_db_header(dbfd, &dbhdr) == STATUS_ERROR) {
-      printf("Error validating db header\n");
-      return -1;
-    }
-  }
-
-  if (read_employees(dbfd, dbhdr, &employees) != STATUS_SUCCESS) {
-    printf("Error reading employees\n");
-    return 0;
-  }
-
-  if (addstring) {
-    add_employee(dbhdr, &employees, addstring);
-  }
-
-  if (list) {
-    list_employees(dbhdr, employees);
-  }
-
-  output_file(dbfd, dbhdr, employees);
-  return 0;
 }
