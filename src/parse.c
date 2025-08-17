@@ -45,6 +45,8 @@ int add_employee(struct dbheader_t *dbhdr, struct employee_t **employees,
   char *address = strtok(NULL, ",");
   char *hours = strtok(NULL, ",");
 
+  printf("%s %s %s\n", name, address, hours);
+
   if (!name || !address || !hours) {
     printf("Invalid addstring format\n");
     return STATUS_ERROR;
@@ -60,9 +62,7 @@ int add_employee(struct dbheader_t *dbhdr, struct employee_t **employees,
   (*employees)[dbhdr->count]
       .address[sizeof((*employees)[dbhdr->count].address) - 1] = '\0';
 
-  (*employees)[dbhdr->count].hours = htonl(atoi(hours));
-
-  printf("Adding employee: %s, %s, %s\n", name, address, hours);
+  (*employees)[dbhdr->count].hours = atoi(hours);
 
   dbhdr->count++;
 
