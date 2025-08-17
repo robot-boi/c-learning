@@ -15,14 +15,19 @@
 int add_employee(struct dbheader_t *dbhdr, struct employee_t *employees,
                  char *addstring) {
 
+  if (dbhdr == NULL || employees == NULL || addstring == NULL) {
+    printf("Invalid input to add_employee\n");
+    return STATUS_ERROR;
+  }
+
   char *name = strtok(addstring, ",");
   char *address = strtok(NULL, ",");
   char *hours = strtok(NULL, ",");
 
   strncpy(employees[dbhdr->count - 1].name, name,
-          sizeof(employees[dbhdr->count - 1]));
+          sizeof(employees[dbhdr->count - 1].name));
   strncpy(employees[dbhdr->count - 1].address, address,
-          sizeof(employees[dbhdr->count - 1]));
+          sizeof(employees[dbhdr->count - 1].address));
   employees[dbhdr->count - 1].hours = htonl(atoi(hours));
 
   printf("Adding employee: %s, %s, %s\n", name, address, hours);
