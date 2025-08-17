@@ -9,10 +9,10 @@
 #include "common.h"
 #include "parse.h"
 
-void list_employees(struct dbheader_t *dbhdr, struct employee_t *employees) {
+int list_employees(struct dbheader_t *dbhdr, struct employee_t *employees) {
   if (dbhdr == NULL || employees == NULL) {
     printf("Invalid input to list_employees\n");
-    return;
+    return STATUS_ERROR;
   }
 
   printf("Employee List:\n");
@@ -21,6 +21,7 @@ void list_employees(struct dbheader_t *dbhdr, struct employee_t *employees) {
     printf("%s\t%s\t%d\n", employees[i].name, employees[i].address,
            ntohl(employees[i].hours));
   }
+  return STATUS_SUCCESS;
 }
 
 int add_employee(struct dbheader_t *dbhdr, struct employee_t *employees,
