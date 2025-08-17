@@ -14,6 +14,7 @@ void print_usage(char *argv[]) {
   printf("  -n            Create a new file\n");
   printf("  -f <filepath> Specify the file path (required)\n");
   printf("  -a <string>   Add a new employee (format: name,address,hours)\n");
+  printf("  -l            List all employees\n");
   return;
 }
 
@@ -21,12 +22,13 @@ int main(int argc, char *argv[]) {
   char *filepath = NULL;
   char *addstring = NULL;
   bool newfile = false;
+  bool list = false;
   int c;
   int dbfd = -1;
   struct dbheader_t *dbhdr = NULL;
   struct employee_t *employees = NULL;
 
-  while ((c = getopt(argc, argv, "nf:a:")) != -1) {
+  while ((c = getopt(argc, argv, "nf:a:l")) != -1) {
     switch (c) {
     case 'n':
       // Handle the -n option
@@ -40,6 +42,10 @@ int main(int argc, char *argv[]) {
     case 'a':
       // Handle the -f option with optarg
       addstring = optarg;
+      break;
+    case 'l':
+      // Handle the -f option with optarg
+      list = true;
       break;
     case '?':
       // Handle unknown options
@@ -89,6 +95,11 @@ int main(int argc, char *argv[]) {
     dbhdr->count++;
     employees = realloc(employees, dbhdr->count * (sizeof(struct employee_t)));
     add_employee(dbhdr, employees, addstring);
+  }
+
+  if (list) {
+    list_employees(dbhdr, employees);
+    return 0;
   }
 
   output_file(dbfd, dbhdr, employees);

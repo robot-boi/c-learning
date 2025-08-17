@@ -9,8 +9,19 @@
 #include "common.h"
 #include "parse.h"
 
-// void list_employees(struct dbheader_t *dbhdr, struct employee_t *employees)
-// {}
+void list_employees(struct dbheader_t *dbhdr, struct employee_t *employees) {
+  if (dbhdr == NULL || employees == NULL) {
+    printf("Invalid input to list_employees\n");
+    return;
+  }
+
+  printf("Employee List:\n");
+  printf("Name\t\tAddress\t\tHours\n");
+  for (int i = 0; i < dbhdr->count; i++) {
+    printf("%s\t%s\t%d\n", employees[i].name, employees[i].address,
+           ntohl(employees[i].hours));
+  }
+}
 
 int add_employee(struct dbheader_t *dbhdr, struct employee_t *employees,
                  char *addstring) {
