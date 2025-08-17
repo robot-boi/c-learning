@@ -15,12 +15,13 @@ int list_employees(struct dbheader_t *dbhdr, struct employee_t *employees) {
     return STATUS_ERROR;
   }
 
-  printf("Employee List:\n");
-  printf("Name\t\tAddress\t\tHours\n");
   for (int i = 0; i < dbhdr->count; i++) {
-    printf("%s\t%s\t%d\n", employees[i].name, employees[i].address,
-           ntohl(employees[i].hours));
+    printf("Employee %d\n", i);
+    printf("\tName: %s\n", employees[i].name);
+    printf("\tAddress: %s\n", employees[i].address);
+    printf("\tHours: %u\n", ntohl(employees[i].hours));
   }
+
   return STATUS_SUCCESS;
 }
 
@@ -53,10 +54,12 @@ int add_employee(struct dbheader_t *dbhdr, struct employee_t **employees,
           sizeof((*employees)[dbhdr->count].name) - 1);
   (*employees)[dbhdr->count].name[sizeof((*employees)[dbhdr->count].name) - 1] =
       '\0';
+
   strncpy((*employees)[dbhdr->count].address, address,
           sizeof((*employees)[dbhdr->count].address) - 1);
   (*employees)[dbhdr->count]
       .address[sizeof((*employees)[dbhdr->count].address) - 1] = '\0';
+
   (*employees)[dbhdr->count].hours = htonl(atoi(hours));
 
   printf("Adding employee: %s, %s, %s\n", name, address, hours);
