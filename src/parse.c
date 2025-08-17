@@ -24,25 +24,44 @@ int list_employees(struct dbheader_t *dbhdr, struct employee_t *employees) {
   return STATUS_SUCCESS;
 }
 
-int add_employee(struct dbheader_t *dbhdr, struct employee_t *employees,
+int add_employee(struct dbheader_t *dbhdr, struct employee_t **employees,
                  char *addstring) {
 
-  // if (dbhdr == NULL || employees == NULL || addstring == NULL) {
-  //   printf("Invalid input to add_employee\n");
-  //   return STATUS_ERROR;
-  // }
+  if (dbhdr == NULL || employees == NULL || addstring == NULL) {
+    printf("Invalid input to add_employee\n");
+    return STATUS_ERROR;
+  }
+
+  struct employee_t *tmp =
+      realloc(*employees, (dbhdr->count + 1) * sizeof(struct employee_t));
+  if (tmp == NULL) {
+    printf("Error reallocating memory for employees\n");
+    return STATUS_ERROR;
+  }
+  *employees = tmp;
 
   char *name = strtok(addstring, ",");
   char *address = strtok(NULL, ",");
   char *hours = strtok(NULL, ",");
 
-  strncpy(employees[dbhdr->count - 1].name, name,
-          sizeof(employees[dbhdr->count - 1].name));
-  strncpy(employees[dbhdr->count - 1].address, address,
-          sizeof(employees[dbhdr->count - 1].address));
-  employees[dbhdr->count - 1].hours = htonl(atoi(hours));
+  if (!name || !address || !hours) {
+    printf("Invalid addstring format\n");
+    return STATUS_ERROR;
+  }
+
+  strncpy((*employees)[dbhdr->count].name, name,
+          sizeof((*employees)[dbhdr->count].name) - 1);
+  (*employees)[dbhdr->count].name[sizeof((*employees)[dbhdr->count].name) - 1] =
+      '\0';
+  strncpy((*employees)[dbhdr->count].address, address,
+          sizeof((*employees)[dbhdr->count].address) - 1);
+  (*employees)[dbhdr->count]
+      .address[sizeof((*employees)[dbhdr->count].address) - 1] = '\0';
+  (*employees)[dbhdr->count].hours = htonl(atoi(hours));
 
   printf("Adding employee: %s, %s, %s\n", name, address, hours);
+
+  dbhdr->count++;
 
   return STATUS_SUCCESS;
 }
