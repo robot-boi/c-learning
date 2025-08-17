@@ -18,17 +18,14 @@ int add_employee(struct dbheader_t *dbhdr, struct employee_t *employees,
   char *name = strtok(addstring, ",");
   char *address = strtok(NULL, ",");
   char *hours = strtok(NULL, ",");
-  if (name == NULL || address == NULL || hours == NULL) {
-    printf("Invalid addstring format. Expected: name,address,hours\n");
-    return STATUS_ERROR;
-  }
-  printf("Adding employee: %s, %s, %s\n", name, address, hours);
 
   strncpy(employees[dbhdr->count - 1].name, name,
           sizeof(employees[dbhdr->count - 1]));
   strncpy(employees[dbhdr->count - 1].address, address,
           sizeof(employees[dbhdr->count - 1]));
   employees[dbhdr->count - 1].hours = htonl(atoi(hours));
+
+  printf("Adding employee: %s, %s, %s\n", name, address, hours);
 
   return STATUS_SUCCESS;
 }
