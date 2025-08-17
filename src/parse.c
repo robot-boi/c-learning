@@ -30,7 +30,7 @@ int add_employee(struct dbheader_t *dbhdr, struct employee_t *employees,
           sizeof(employees[dbhdr->count - 1]));
   employees[dbhdr->count - 1].hours = htonl(atoi(hours));
 
-  return STATUS_ERROR;
+  return STATUS_SUCCESS;
 }
 
 int read_employees(int fd, struct dbheader_t *dbhdr,
