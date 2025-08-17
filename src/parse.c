@@ -12,11 +12,49 @@
 // void list_employees(struct dbheader_t *dbhdr, struct employee_t *employees)
 // {}
 
-// int add_employee(struct dbheader_t *dbhdr, struct employee_t *employees,
-//                  char *addstring) {}
+int add_employee(struct dbheader_t *dbhdr, struct employee_t *employees,
+                 char *addstring) {
 
-// int read_employees(int fd, struct dbheader_t *dbhdr,
-//                    struct employee_t **employeesOut) {}
+  char *name = strtok(addstring, ",");
+  char *address = strtok(NULL, ",");
+  char *hours = strtok(NULL, ",");
+  if (name == NULL || address == NULL || hours == NULL) {
+    printf("Invalid addstring format. Expected: name,address,hours\n");
+    return STATUS_ERROR;
+  }
+  printf("Adding employee: %s, %s, %s\n", name, address, hours);
+
+  strncpy(employees[dbhdr->count - 1].name, name,
+          sizeof(employees[dbhdr->count - 1]));
+  strncpy(employees[dbhdr->count - 1].address, address,
+          sizeof(employees[dbhdr->count - 1]));
+  employees[dbhdr->count - 1].hours = htonl(atoi(hours));
+
+  return STATUS_ERROR;
+}
+
+int read_employees(int fd, struct dbheader_t *dbhdr,
+                   struct employee_t **employeesOut) {
+  if (fd < 0) {
+    perror("Invalid file descriptor");
+    return STATUS_ERROR;
+  }
+
+  int count = dbhdr->count;
+  struct employee_t *employees = calloc(count, sizeof(struct employee_t));
+  if (employees == NULL) {
+    printf("Error allocating memory for employees\n");
+    return STATUS_ERROR;
+  }
+
+  read(fd, employees, count * sizeof(struct employee_t));
+
+  for (int i = 0; i < count; i++) {
+    employees[i].hours = ntohl(employees[i].hours);
+  }
+  *employeesOut = employees;
+  return STATUS_SUCCESS;
+}
 
 int output_file(int fd, struct dbheader_t *dbhdr,
                 struct employee_t *employees) {
@@ -26,13 +64,20 @@ int output_file(int fd, struct dbheader_t *dbhdr,
     return STATUS_ERROR;
   }
 
+  int realcount = dbhdr->count;
   dbhdr->magic = htonl(dbhdr->magic);
-  dbhdr->filesize = htonl(dbhdr->filesize);
+  dbhdr->filesize =
+      htonl(sizeof(struct dbheader_t) + realcount * sizeof(struct employee_t));
   dbhdr->count = htons(dbhdr->count);
   dbhdr->version = htons(dbhdr->version);
 
   lseek(fd, 0, SEEK_SET);
   write(fd, dbhdr, sizeof(struct dbheader_t));
+
+  for (int i = 0; i < realcount; i++) {
+    employees[i].hours = htonl(employees[i].hours);
+    write(fd, &employees[i], sizeof(struct employee_t));
+  }
 
   return STATUS_SUCCESS;
 }

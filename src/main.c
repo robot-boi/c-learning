@@ -13,17 +13,20 @@ void print_usage(char *argv[]) {
   printf("Options:\n");
   printf("  -n            Create a new file\n");
   printf("  -f <filepath> Specify the file path (required)\n");
+  printf("  -a <string>   Add a new employee (format: name,address,hours)\n");
   return;
 }
 
 int main(int argc, char *argv[]) {
   char *filepath = NULL;
+  char *addstring = NULL;
   bool newfile = false;
   int c;
   int dbfd = -1;
   struct dbheader_t *dbhdr = NULL;
+  struct employee_t *employees = NULL;
 
-  while ((c = getopt(argc, argv, "nf:")) != -1) {
+  while ((c = getopt(argc, argv, "nf:a:")) != -1) {
     switch (c) {
     case 'n':
       // Handle the -n option
@@ -32,6 +35,11 @@ int main(int argc, char *argv[]) {
     case 'f':
       // Handle the -f option with optarg
       filepath = optarg;
+      break;
+
+    case 'a':
+      // Handle the -f option with optarg
+      addstring = optarg;
       break;
     case '?':
       // Handle unknown options
@@ -72,9 +80,17 @@ int main(int argc, char *argv[]) {
     }
   }
 
-  printf("New file: %d\n", newfile);
-  printf("Filepath: %s\n", filepath);
+  if (read_employees(dbfd, dbhdr, &employees) != STATUS_SUCCESS) {
+    printf("Error reading employees\n");
+    return 0;
+  }
 
-  output_file(dbfd, dbhdr, NULL);
+  if (addstring) {
+    dbhdr->count++;
+    employees = realloc(employees, dbhdr->count * sizeof(struct employee_t));
+    add_employee(dbhdr, employees, addstring);
+  }
+
+  output_file(dbfd, dbhdr, employees);
   return 0;
 }
