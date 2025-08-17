@@ -97,7 +97,6 @@ int main(int argc, char *argv[]) {
 
   if (list) {
     list_employees(dbhdr, employees);
-    return 0;
   }
 
   output_file(dbfd, dbhdr, employees);

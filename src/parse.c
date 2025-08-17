@@ -14,8 +14,8 @@ int list_employees(struct dbheader_t *dbhdr, struct employee_t *employees) {
     printf("Invalid input to list_employees\n");
     return STATUS_ERROR;
   }
-
-  for (int i = 0; i < dbhdr->count; i++) {
+  int i = 0;
+  for (; i < dbhdr->count; i++) {
     printf("Employee %d\n", i);
     printf("\tName: %s\n", employees[i].name);
     printf("\tAddress: %s\n", employees[i].address);
